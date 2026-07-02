@@ -1,0 +1,13 @@
+Product Listing
+
+Title: SolarEdge Mini Sensor
+SKU: SES-MINI-001
+Price: 49.99 USD
+In stock: yes
+Category: IoT Hardware
+
+Description:
+Compact low-power sensor designed for offline edge deployments.
+Battery life up to 12 months on a single charge.
+
+Tags: sensor, iot, offline, edge

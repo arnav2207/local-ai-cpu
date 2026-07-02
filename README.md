@@ -49,9 +49,62 @@ Environment variables (optional):
 ## Development
 
 ```bash
-uv run pytest
+uv run pytest -m "not slow"
 uv run ruff check src tests
 ```
+
+Run the optional live model integration test after downloading the GGUF file:
+
+```bash
+uv run pytest -m slow
+```
+
+## Hackathon demo flow
+
+Use this 3-minute judge demo to show offline structured extraction end to end.
+
+1. **Install and download the model**
+   ```bash
+   uv sync --extra dev
+   uv run python scripts/download_model.py
+   ```
+
+2. **Launch the UI**
+   ```bash
+   uv run streamlit run src/local_ai_cpu/app.py
+   ```
+
+3. **Schema Builder tab**
+   - Upload [`examples/contact_schema.json`](examples/contact_schema.json), or build fields manually
+   - Click **Save schema**
+
+4. **Ingest tab**
+   - Upload [`examples/contact.txt`](examples/contact.txt)
+   - Confirm the text preview, then click **Save document**
+
+5. **Extract tab**
+   - Select the saved schema and document (or upload the file directly)
+   - Click **Run extraction**
+   - Show structured JSON output and note CPU metrics in the status panel
+
+6. **Results tab**
+   - Open the latest job and compare source text vs extracted JSON side by side
+   - Download the JSON export
+
+7. **Metrics tab**
+   - Highlight peak CPU %, memory footprint, and cache behavior
+   - Run extraction again to demonstrate a **cache hit** without LLM latency
+
+8. **Offline resiliency check**
+   - Disconnect from the network
+   - Re-run extraction on the same file + schema
+   - Confirm the app still works using the local model and SQLite cache
+
+### Alternate demo
+
+Repeat steps 3–7 with:
+- Schema: [`examples/product_schema.json`](examples/product_schema.json)
+- Document: [`examples/product_listing.txt`](examples/product_listing.txt)
 
 ## Hackathon constraints
 

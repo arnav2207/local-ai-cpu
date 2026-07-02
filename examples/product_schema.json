@@ -1,0 +1,37 @@
+{
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Product title"
+    },
+    "sku": {
+      "type": "string",
+      "description": "Stock keeping unit"
+    },
+    "price_usd": {
+      "type": "number",
+      "description": "Price in US dollars"
+    },
+    "in_stock": {
+      "type": "boolean",
+      "description": "Whether the product is in stock"
+    },
+    "category": {
+      "type": "string",
+      "description": "Product category"
+    },
+    "description": {
+      "type": "string",
+      "description": "Product description"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Product tags"
+    }
+  },
+  "required": ["title", "sku", "price_usd"]
+}

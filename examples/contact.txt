@@ -1,0 +1,9 @@
+Contact Card
+
+Name: Jane Doe
+Email: jane.doe@example.com
+Phone: +1 (555) 123-4567
+Company: Acme Labs
+Role: Product Engineer
+
+Notes: Met at the offline AI hackathon. Interested in edge deployment.
