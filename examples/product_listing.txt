@@ -2,7 +2,7 @@ Product Listing
 
 Title: SolarEdge Mini Sensor
 SKU: SES-MINI-001
-Price: 49.99 USD
+Price: 49.99 INR
 In stock: yes
 Category: IoT Hardware
 

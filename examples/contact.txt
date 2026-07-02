@@ -1,9 +1,9 @@
 Contact Card
 
-Name: Jane Doe
-Email: jane.doe@example.com
-Phone: +1 (555) 123-4567
-Company: Acme Labs
-Role: Product Engineer
+Name: Arnav Avuturu
+Email: arnav@example.com
+Phone: +91 9999999999
+Company: Viswam AI
+Role: AI Intern
 
-Notes: Met at the offline AI hackathon. Interested in edge deployment.
+Notes: Interested in App/Web Dev.
