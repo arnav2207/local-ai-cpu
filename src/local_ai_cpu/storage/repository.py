@@ -132,6 +132,17 @@ class Repository:
             ).fetchone()
         return _row_to_document(row) if row else None
 
+    def list_documents(self, limit: int = 50) -> list[DocumentRecord]:
+        with connect(self.db_path) as conn:
+            rows = conn.execute(
+                """
+                SELECT id, filename, content_hash, raw_text, created_at
+                FROM documents ORDER BY id DESC LIMIT ?
+                """,
+                (limit,),
+            ).fetchall()
+        return [_row_to_document(row) for row in rows]
+
     def create_job(self, schema_id: int, document_id: int) -> int:
         with connect(self.db_path) as conn:
             cursor = conn.execute(
