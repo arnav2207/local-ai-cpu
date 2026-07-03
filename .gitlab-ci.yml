@@ -2,7 +2,7 @@ stages:
   - format
   - lint
   - test
-
+  - typecheck
 workflow:
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -41,3 +41,9 @@ pytest:
   stage: test
   script:
     - uv run pytest -m "not slow"
+
+mypy:
+  <<: *setup_uv
+  stage: typecheck
+  script:
+    - uv run mypy .

@@ -24,7 +24,7 @@ from local_ai_cpu.ingestion import (
     persist_document,
 )
 from local_ai_cpu.pipeline import PipelineResult, run_pipeline, run_pipeline_for_document
-from local_ai_cpu.storage import Repository
+from local_ai_cpu.storage import JobRecord, Repository
 
 FIELD_TYPES = ["string", "number", "integer", "boolean", "array"]
 
@@ -268,8 +268,9 @@ def _render_extract(repo: Repository) -> None:
                 st.write("Ingesting document...")
                 result = run_pipeline(repo, schema_id, upload.name, upload.getvalue())
             else:
+                assert document_id is not None
                 st.write(f"Extracting from document #{document_id}...")
-                result = run_pipeline_for_document(repo, schema_id, int(document_id))
+                result = run_pipeline_for_document(repo, schema_id, document_id)
 
             st.session_state.last_pipeline_result = result
             st.session_state.selected_document_id = result.document_id
@@ -318,11 +319,11 @@ def _render_results(repo: Repository) -> None:
 
     job_ids = [job.id for job in jobs]
     selected_job_id = st.selectbox("Inspect job", job_ids)
-    job = repo.get_job(selected_job_id)
+    selected_job: JobRecord | None = repo.get_job(selected_job_id)
     extraction = repo.get_extraction_by_job(selected_job_id)
-    document = repo.get_document(job.document_id) if job else None
+    document = repo.get_document(selected_job.document_id) if selected_job else None
 
-    if job and extraction and document:
+    if selected_job and extraction and document:
         left, right = st.columns(2)
         with left:
             st.markdown("**Source text**")

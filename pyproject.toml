@@ -24,6 +24,9 @@ llm = [
 dev = [
     "pytest>=8.0",
     "ruff>=0.4",
+    "mypy>=1.10",
+    "types-jsonschema>=4.21",
+    "types-psutil>=5.9",
 ]
 
 [project.scripts]
@@ -45,3 +48,12 @@ target-version = "py311"
 
 [tool.ruff.lint]
 select = ["E", "F", "I"]
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+
+[[tool.mypy.overrides]]
+module = ["fitz", "pytesseract", "llama_cpp"]
+ignore_missing_imports = true

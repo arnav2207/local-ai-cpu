@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+from typing import Any, cast
 
 import pytest
 
@@ -21,8 +22,11 @@ def repo(tmp_path: Path) -> Repository:
 
 
 @pytest.fixture
-def contact_schema(examples_dir: Path) -> dict:
-    return json.loads((examples_dir / "contact_schema.json").read_text(encoding="utf-8"))
+def contact_schema(examples_dir: Path) -> dict[str, Any]:
+    return cast(
+        dict[str, Any],
+        json.loads((examples_dir / "contact_schema.json").read_text(encoding="utf-8")),
+    )
 
 
 @pytest.fixture

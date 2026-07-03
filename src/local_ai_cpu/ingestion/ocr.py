@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import io
 import shutil
+from typing import cast
 
 import pytesseract
 from PIL import Image
@@ -37,4 +38,4 @@ def extract_text(data: bytes) -> str:
     if not text.strip():
         raise IngestionError("OCR completed but no text was detected in the image.")
 
-    return text
+    return cast(str, text)

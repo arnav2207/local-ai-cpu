@@ -6,7 +6,7 @@ import hashlib
 import json
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 from local_ai_cpu.storage.database import connect, init_db
 
@@ -69,7 +69,8 @@ class Repository:
                 "INSERT INTO schemas (name, json_schema) VALUES (?, ?)",
                 (name, payload),
             )
-            return int(cursor.lastrowid)
+            assert cursor.lastrowid is not None
+            return cursor.lastrowid
 
     def get_schema(self, schema_id: int) -> SchemaRecord | None:
         with connect(self.db_path) as conn:
@@ -152,7 +153,8 @@ class Repository:
                 """,
                 (schema_id, document_id),
             )
-            return int(cursor.lastrowid)
+            assert cursor.lastrowid is not None
+            return cursor.lastrowid
 
     def update_job(
         self,
@@ -224,7 +226,8 @@ class Repository:
                 """,
                 (job_id, payload, int(validation_ok)),
             )
-            return int(cursor.lastrowid)
+            assert cursor.lastrowid is not None
+            return cursor.lastrowid
 
     def get_extraction_by_job(self, job_id: int) -> ExtractionRecord | None:
         with connect(self.db_path) as conn:
@@ -248,7 +251,7 @@ class Repository:
             ).fetchone()
         if row is None:
             return None
-        return json.loads(row["result_json"])
+        return cast(dict[str, Any], json.loads(row["result_json"]))
 
     def upsert_cache(
         self,

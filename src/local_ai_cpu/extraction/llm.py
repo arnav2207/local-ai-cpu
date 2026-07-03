@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, cast
 
 from local_ai_cpu.config import (
     DEFAULT_MODEL_PATH,
@@ -47,7 +47,7 @@ def _load_llama_class() -> type[Llama]:
         )
     from llama_cpp import Llama
 
-    return Llama
+    return cast(type[Llama], Llama)
 
 
 def get_llm(model_path: Path | None = None) -> Llama:
@@ -93,7 +93,7 @@ def generate_chat(
 ) -> str:
     """Run a chat completion and return the assistant message content."""
     llm = get_llm(model_path)
-    response: dict[str, Any] = llm.create_chat_completion(
+    response: Any = llm.create_chat_completion(
         messages=[
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": user_prompt},
