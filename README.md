@@ -21,8 +21,8 @@ All inference runs on-device. No cloud APIs are required after the initial model
 ## Quick start
 
 ```bash
-# Install dependencies
-uv sync --extra dev
+# Install dependencies (add --extra llm for local model inference)
+uv sync --extra dev --extra llm
 
 # Download the default model (one-time; requires network)
 uv run python scripts/download_model.py
@@ -49,13 +49,15 @@ Environment variables (optional):
 ## Development
 
 ```bash
+uv sync --extra dev
 uv run pytest -m "not slow"
 uv run ruff check src tests
 ```
 
-Run the optional live model integration test after downloading the GGUF file:
+For local model inference and slow integration tests, also install the `llm` extra:
 
 ```bash
+uv sync --extra dev --extra llm
 uv run pytest -m slow
 ```
 

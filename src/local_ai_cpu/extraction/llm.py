@@ -3,9 +3,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Any
-
-from llama_cpp import Llama
+from typing import TYPE_CHECKING, Any
 
 from local_ai_cpu.config import (
     DEFAULT_MODEL_PATH,
@@ -16,7 +14,10 @@ from local_ai_cpu.config import (
     ensure_data_dirs,
 )
 
-_LLM_INSTANCE: Llama | None = None
+if TYPE_CHECKING:
+    from llama_cpp import Llama
+
+_LLM_INSTANCE: Any | None = None
 _LLM_MODEL_PATH: Path | None = None
 
 
@@ -24,9 +25,29 @@ class ModelNotFoundError(FileNotFoundError):
     """Raised when the local GGUF model file is missing."""
 
 
+class LlamaCppNotInstalledError(ImportError):
+    """Raised when llama-cpp-python is not installed."""
+
+
+def is_llama_cpp_available() -> bool:
+    import importlib.util
+
+    return importlib.util.find_spec("llama_cpp") is not None
+
+
 def is_model_available(model_path: Path | None = None) -> bool:
     path = model_path or DEFAULT_MODEL_PATH
-    return path.exists()
+    return is_llama_cpp_available() and path.exists()
+
+
+def _load_llama_class() -> type[Llama]:
+    if not is_llama_cpp_available():
+        raise LlamaCppNotInstalledError(
+            "llama-cpp-python is not installed. Run: uv sync --extra llm"
+        )
+    from llama_cpp import Llama
+
+    return Llama
 
 
 def get_llm(model_path: Path | None = None) -> Llama:
@@ -42,6 +63,7 @@ def get_llm(model_path: Path | None = None) -> Llama:
     if _LLM_INSTANCE is not None and _LLM_MODEL_PATH == path:
         return _LLM_INSTANCE
 
+    Llama = _load_llama_class()
     ensure_data_dirs()
     _LLM_INSTANCE = Llama(
         model_path=str(path),

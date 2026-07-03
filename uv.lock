@@ -387,7 +387,6 @@ source = { editable = "." }
 dependencies = [
     { name = "httpx" },
     { name = "jsonschema" },
-    { name = "llama-cpp-python" },
     { name = "pillow" },
     { name = "psutil" },
     { name = "pymupdf" },
@@ -400,12 +399,15 @@ dev = [
     { name = "pytest" },
     { name = "ruff" },
 ]
+llm = [
+    { name = "llama-cpp-python" },
+]
 
 [package.metadata]
 requires-dist = [
     { name = "httpx", specifier = ">=0.27" },
     { name = "jsonschema", specifier = ">=4.21" },
-    { name = "llama-cpp-python", specifier = ">=0.3" },
+    { name = "llama-cpp-python", marker = "extra == 'llm'", specifier = ">=0.3" },
     { name = "pillow", specifier = ">=10.0" },
     { name = "psutil", specifier = ">=5.9" },
     { name = "pymupdf", specifier = ">=1.24" },
@@ -414,7 +416,7 @@ requires-dist = [
     { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.4" },
     { name = "streamlit", specifier = ">=1.32" },
 ]
-provides-extras = ["dev"]
+provides-extras = ["llm", "dev"]
 
 [[package]]
 name = "markupsafe"

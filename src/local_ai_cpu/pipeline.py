@@ -7,7 +7,11 @@ from pathlib import Path
 from typing import Any
 
 from local_ai_cpu.extraction.extractor import ExtractionResult, extract_structured
-from local_ai_cpu.extraction.llm import ModelNotFoundError, is_model_available
+from local_ai_cpu.extraction.llm import (
+    LlamaCppNotInstalledError,
+    ModelNotFoundError,
+    is_model_available,
+)
 from local_ai_cpu.extraction.schema import SchemaValidationError, validate_schema_definition
 from local_ai_cpu.ingestion.base import IngestionError
 from local_ai_cpu.ingestion.dispatcher import ingest_bytes, persist_document
@@ -151,7 +155,13 @@ def _run_extraction_for_document(
             chunk_count=extraction.chunk_count,
             metrics=metrics,
         )
-    except (IngestionError, SchemaValidationError, ModelNotFoundError, ValueError) as exc:
+    except (
+        IngestionError,
+        SchemaValidationError,
+        ModelNotFoundError,
+        LlamaCppNotInstalledError,
+        ValueError,
+    ) as exc:
         repo.update_job(job_id, status="failed", error=str(exc), finished=True)
         return PipelineResult(
             job_id=job_id,

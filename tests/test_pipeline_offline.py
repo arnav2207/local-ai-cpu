@@ -55,7 +55,7 @@ def test_live_extraction_with_local_model(
     examples_dir,
 ) -> None:
     if not is_model_available():
-        pytest.skip("Local GGUF model not downloaded")
+        pytest.skip("llama-cpp-python not installed or local GGUF model not downloaded")
 
     reset_llm_cache()
     schema_id = repo.save_schema("contact", contact_schema)
