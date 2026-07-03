@@ -23,10 +23,13 @@ llm = [
 ]
 dev = [
     "pytest>=8.0",
+    "pytest-cov>=5.0",
     "ruff>=0.4",
     "mypy>=1.10",
     "types-jsonschema>=4.21",
     "types-psutil>=5.9",
+    "vulture>=2.14",
+    "bandit>=1.8",
 ]
 
 [project.scripts]
@@ -41,6 +44,38 @@ testpaths = ["tests"]
 markers = [
     "slow: marks tests that load a local model (deselect with '-m \"not slow\"')",
 ]
+addopts = [
+    "--cov=local_ai_cpu",
+    "--cov-report=term-missing",
+    "--cov-report=xml",
+]
+
+[tool.coverage.run]
+source = ["local_ai_cpu"]
+branch = true
+omit = [
+    "tests/*",
+    "*/local_ai_cpu/app.py",
+]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+fail_under = 60
+exclude_lines = [
+    "pragma: no cover",
+    "if TYPE_CHECKING:",
+    "raise NotImplementedError",
+]
+
+[tool.vulture]
+paths = ["src", "tests"]
+min_confidence = 80
+ignore_names = ["test_*", "conftest", "main", "setUp", "tearDown"]
+
+[tool.bandit]
+exclude_dirs = ["tests", ".venv"]
+skips = ["B101"]
 
 [tool.ruff]
 line-length = 100

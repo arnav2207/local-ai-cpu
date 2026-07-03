@@ -1,8 +1,10 @@
 stages:
   - format
   - lint
+  - security
   - test
   - typecheck
+
 workflow:
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -36,11 +38,32 @@ ruff_lint:
   script:
     - uv run ruff check src tests
 
+bandit:
+  <<: *setup_uv
+  stage: security
+  script:
+    - uv run bandit -r src -c pyproject.toml
+
+vulture:
+  <<: *setup_uv
+  stage: security
+  script:
+    - uv run vulture src tests --min-confidence 80
+
 pytest:
   <<: *setup_uv
   stage: test
   script:
-    - uv run pytest -m "not slow"
+    - uv run pytest -m "not slow" --cov-fail-under=60
+  coverage: '/TOTAL.*\s+(\d+%)$/'
+  artifacts:
+    when: always
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage.xml
+    paths:
+      - coverage.xml
 
 mypy:
   <<: *setup_uv

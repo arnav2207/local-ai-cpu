@@ -38,7 +38,7 @@ class ResourceMonitor:
         self._thread.start()
         return self
 
-    def __exit__(self, exc_type, exc, tb) -> None:
+    def __exit__(self, _exc_type, exc, _tb) -> None:
         self._stop.set()
         if self._thread is not None:
             self._thread.join(timeout=1.0)

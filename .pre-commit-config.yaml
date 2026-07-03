@@ -1,28 +1,45 @@
 repos:
   - repo: local
     hooks:
-      - id: ruff
+      - id: ruff-format
         name: ruff formatter
         entry: uv run ruff format
         stages: [pre-commit]
         language: system
         types: [python]
-      - id: ruff
+
+      - id: ruff-lint
         name: ruff linter
         entry: uv run ruff check --fix
         stages: [pre-commit]
         language: system
         types: [python]
-      - id: pytest
-        name: pytest
-        entry: uv run pytest -m "not slow"
+
+      - id: bandit
+        name: bandit
+        entry: uv run bandit -r src -c pyproject.toml
+        stages: [pre-commit]
+        language: system
+        pass_filenames: false
+
+      - id: vulture
+        name: vulture
+        entry: uv run vulture src tests --min-confidence 80
+        stages: [pre-commit]
+        language: system
+        pass_filenames: false
+
+      - id: mypy
+        name: mypy
+        entry: uv run mypy .
         stages: [pre-commit]
         language: system
         types: [python]
         pass_filenames: false
-      - id: mypy
-        name: mypy
-        entry: uv run mypy .
+
+      - id: pytest
+        name: pytest
+        entry: uv run pytest -m "not slow" --cov-fail-under=60
         stages: [pre-commit]
         language: system
         types: [python]

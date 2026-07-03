@@ -180,7 +180,7 @@ class Repository:
             return
 
         values.append(job_id)
-        query = f"UPDATE jobs SET {', '.join(fields)} WHERE id = ?"
+        query = f"UPDATE jobs SET {', '.join(fields)} WHERE id = ?"  # nosec B608
         with connect(self.db_path) as conn:
             conn.execute(query, values)
 
