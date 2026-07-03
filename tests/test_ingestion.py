@@ -11,7 +11,7 @@ from local_ai_cpu.processing import chunk_text, normalize_text
 
 def test_ingest_contact_example(contact_text: bytes) -> None:
     ingested = ingest_bytes("contact.txt", contact_text)
-    assert "Jane Doe" in ingested.raw_text
+    assert "Arnav Avuturu" in ingested.raw_text
     assert ingested.source_type == "text"
 
 
